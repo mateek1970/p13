@@ -1,0 +1,12 @@
+08-02-2024
+
+data.html	for sale data
+data.json	for sale data
+
+Inventory.html	for inventory management
+inventory.json	same
+scropt.js	same
+
+server.js	for all
+
+Don't use serverGemini

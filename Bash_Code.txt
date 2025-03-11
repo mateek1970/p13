@@ -1,0 +1,21 @@
+NEW PROJECT LATEST SCRIPT
+
+SERVER SIDE HTML/JS PROJECT
+
+npm init -y
+npm install express
+
+STEPS TO RUN:
+
+RUN SERVER in terminal same folder:
+	node server.js
+
+In Browser type:
+	localhost:3000/Index.html
+
+Steps to Run:
+
+Install Dependencies: In your server-side project directory, run: npm install express body-parser
+Create inventory.json: Create an empty inventory.json file in the same directory as server.js.
+Run the Server: Start your Node.js server: node server.js
+Open HTML: Open your index.html file in a web browser.

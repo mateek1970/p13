@@ -1,0 +1,181 @@
+body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+
+            background: #f2f2f2;
+        }
+        .forms-container {
+          display: flex; /* Use Flexbox */
+          gap: 10px; /* Space between the two forms */
+          justify-content: flex-start; /* Align forms to the start of the container */
+            /*display: grid;
+            grid-template-columns: 45% 55%;
+            width: 100%;
+            gap: 10px;*/
+
+        }
+        .form1-container {
+            /*flex: 1; /* Form 1 occupies 1 parts of the available space */
+            flex: 40%;
+            padding: 5px 10px 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            /*background-color: #cad2ca;*/
+            box-shadow: 5px 5px 5px  #727475;
+            background-image: linear-gradient(to right, #8b8c8f, #c9c6c6); /* Gradient from pink to orange */
+        }
+        .form2-container {
+          /*flex: 2; /* Form 2 occupies 2 parts of the available space */
+          flex: 60%;
+          padding: 5px 10px 5px 10px;
+          border: 1px solid #ddd;
+          border-radius: 5px;
+          /*background-color: #cad2ca;*/
+          box-shadow: 5px 5px 5px  #727475;
+          background-image: linear-gradient(to right, #8b8c8f, #c9c6c6); /* Gradient from pink to orange */
+      }
+.body2 {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding-left: 10px;
+      color:rgb(11, 21, 92);
+      margin-left: 5px;
+      margin-right: 5px;
+      background: #a4a4a2;
+
+    }
+
+    .form-container2 {
+    background: azure;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px; /* Space between columns */
+      /*max-width: 600px;*/
+      margin-left: 5px;
+        width: 450px;
+      padding: 20px;
+      border-radius:15px;
+      box-shadow: 0 5px 8px #4f8099;
+      font-size: 14px;
+      
+    }
+label {
+      font-weight: bold;
+
+      color: #392d14;
+    }
+
+input, select, textarea {
+      padding: 5px;
+      font-size: 13px;
+      border: 1px solid #5f9898;
+      border-radius: 5px;
+      /*color: #286363;*/
+      margin-bottom: 8px;
+    }
+  .textarea {
+    font-size: 13;
+    border: 1px solid #5f9898;
+    border-radius: 5px;
+    vertical-align: top;
+  }
+
+    .full-width {
+      grid-column: span 2;
+    }
+
+    button {
+      padding: 5px 10px;
+      font-size: 14px;
+      color: #fff;
+      background-color: #284545;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #162424;
+      color:#f6f2a3
+    }
+#tableContainer {
+            max-height: 350px; /* Set a fixed height for the table container */
+            overflow-y: auto; /* Enable vertical scrolling */
+
+        }    
+    table
+    {
+        font-size: 13px;
+        color:#272525;
+        align-self:center;
+        height: auto;
+        align-items: center;
+        line-height: 1em;
+        border-radius: 10px;
+
+        /*border: 4px, blue sloid;*/
+        /*margin-left: 5px;*/
+        box-shadow: 0 5px 8px #4f8099;
+        width: auto;
+    }
+    
+    table, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        border-color: #5ea5a5;
+        /*text-align: left;*/
+        padding: 6px 4px 6px 4px;
+        border-radius: 5px;
+    
+    }
+    table, th {
+        border: 1px solid black;
+        border-collapse: collapse;
+        border-color: #5ea5a5;
+        text-align: center;
+        padding: 4px;
+        border-radius: 5px;
+
+    }
+    table th {
+        background-color: #284545;
+        color: #ffffff;
+
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+    /* First column text-align: left */
+    td:first-child, th:first-child {
+      text-align: left;
+    }
+
+    /* Rest of the columns text-align: center */
+    td:not(:first-child), th:not(:first-child) {
+      text-align: center;
+      width: 50px;
+    }
+    tr:nth-child(odd) {
+      background-color: #efefef; /* Light grey for odd rows */
+    }
+    tr:nth-child(even) {
+      background-color: #ffffff; /* White for even rows */
+    }
+    .notes-cell {
+      cursor: pointer;
+      color: blue;
+      text-decoration: underline;
+  }
+  .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgb(242, 239, 160);
+      padding: 20px;
+      border: 1px solid #74948e;
+      border-radius: 10px;
+      box-shadow: 10px 10px 20px rgba(82, 150, 147, 0.1);
+      z-index: 1000;
+  }

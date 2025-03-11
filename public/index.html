@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory & Sales Management</title>
+    <link rel="stylesheet" href="style.css"
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <h2>Inventory & Sales Management</h2>
+    <div class="forms-container" >
+        <!-- Form 1 -->
+        <div class="form1-container">
+    <h3>Inventory Data</h3>
+    <form id="inventoryForm">
+        <select id="inventoryProduct" placeholder="Product" required>
+            <option value="">Select a Product</option>
+        </select><br>
+        <input type="number" id="purchasedQuantity" placeholder="Purchased Quantity" required>
+        <input type="number" id="inventoryUnitPrice" placeholder="Unit Price" step="any">
+        <button type="submit">Add Inventory</button>
+    </form>
+    <div id="tableContainer">
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Purch. Q'ty</th>
+                <th>Total Price</th>
+                <th>Sold Q'ty</th>
+                <th>Balance</th>
+
+            </tr>
+        </thead>
+        <tbody id="inventoryTable"></tbody>
+    </table></div>
+    </div>
+
+    <div class="form2-container">
+    <h3>Sales Data</h3>
+    <form id="salesForm">
+        <select id="salesProduct" placeholder="Product" required>
+            <option value="">Select a Product</option>
+        </select><br>
+        <input type="number" id="soldQuantity" placeholder="Sold Quantity" required>
+        <input type="number" id="purchasedPrice" placeholder="Purchased Price" step="any" required>
+        <input type="number" id="salesPrice" placeholder="Sales Price" step="any" required>
+        <input type="number" id="bankFee" placeholder="Bank Fee" step="any" required>
+        <input type="number" id="ebayFee" placeholder="eBay Fee" step="any" required>
+        <input type="number" id="shipCost" placeholder="Shipping Cost" step="any" required>
+        <input type="number" id="profit" placeholder="Profit" step="any">
+        <input type="text" id="timestamp" name="timestamp" placeholder="Date '20.01.2025'">
+        <textarea class="textarea" id="notes" name="notes" placeholder="Notes" rows="2" cols="37"></textarea>
+        <button type="submit">Record Sale</button>
+        
+    </form>
+<div id="tableContainer">
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Sold Q'ty</th>
+                <th>Purch. Price</th>
+                <th>Sales Price</th>
+                <th>Bank Fee</th>
+                <th>eBay Fee</th>
+                <th>Shipp. Cost</th>
+                <th>Profit</th>
+                <th>Sold Date</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody id="salesTable"></tbody>
+    </table> </div>
+    
+</div>
+</div>
+
+<!-- Popup for displaying notes -->
+<div id="notesPopup" class="popup">
+    <h3>Notes</h3>
+    <p id="notesContent"></p>
+    <button onclick="closePopup()">Close</button>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const inventoryForm = document.getElementById('inventoryForm');
+    const salesForm = document.getElementById('salesForm');
+    const inventoryTable = document.getElementById('inventoryTable');
+    const salesTable = document.getElementById('salesTable');
+    const inventoryProduct = document.getElementById('inventoryProduct');
+    const salesProduct = document.getElementById('salesProduct');
+
+    const fetchProducts = async () => {
+        const response = await fetch('/products');
+        const products = await response.json();
+        products.forEach(product => {
+            inventoryProduct.innerHTML += `<option value="${product.name}">${product.name}</option>`;
+            salesProduct.innerHTML += `<option value="${product.name}">${product.name}</option>`;
+        });
+    };
+
+    const fetchData = async () => {
+        const response = await fetch('/data');
+        const data = await response.json();
+        renderTables(data);
+    };
+
+    const renderTables = (data) => {
+        inventoryTable.innerHTML = '';
+        data.inventory.forEach(item => {
+            const balance = item.purchasedQuantity - item.soldQuantity;
+            inventoryTable.innerHTML += `
+                <tr>
+                    <td>${item.product}</td>
+                    <td>${item.purchasedQuantity}</td>
+                    <td>${item.totalPrice.toFixed(2)}</td>
+                    <td>${item.soldQuantity}</td>
+                    <td>${balance}</td>
+
+                </tr>
+            `;
+        });
+
+        salesTable.innerHTML = '';
+        data.sales.forEach(sale => {
+            const profit = sale.salesPrice - sale.purchasedPrice - sale.bankFee - sale.ebayFee - sale.shipCost;
+            salesTable.innerHTML += `
+                <tr>
+                    <td>${sale.product}</td>
+                    <td>${sale.soldQuantity}</td>
+                    <td>${sale.purchasedPrice}</td>
+                    <td>${sale.salesPrice}</td>
+                    <td>${sale.bankFee}</td>
+                    <td>${sale.ebayFee}</td>
+                    <td>${sale.shipCost}</td>
+                    <td>${profit.toFixed(2)}</td>
+                    <td>${sale.timestamp}</td>
+                    <td class="notes-cell" onclick="showNotes('${sale.notes.replace(/\n/g, '\\n')}')">Notes</td>
+                    
+                </tr>
+            `;
+        });
+    };
+
+// ******* INVENTORY FORMS **************
+// Function to calculate profit
+function calculateProfit() {
+            const purchasedPrice = parseFloat(document.getElementById('purchasedPrice').value) || 0;
+            const salesPrice = parseFloat(document.getElementById('salesPrice').value) || 0;
+            const bankFee = parseFloat(document.getElementById('bankFee').value) || 0;
+            const ebayFee = parseFloat(document.getElementById('ebayFee').value) || 0;
+            const shipCost = parseFloat(document.getElementById('shipCost').value) || 0;
+
+            const profit = salesPrice - purchasedPrice - bankFee - ebayFee - shipCost;
+            document.getElementById('profit').value = profit.toFixed(2); // Display profit with 2 decimal places
+        }
+
+        // Automatically calculate profit when any input changes
+        document.getElementById('purchasedPrice').addEventListener('input', calculateProfit);
+        document.getElementById('salesPrice').addEventListener('input', calculateProfit);
+        document.getElementById('bankFee').addEventListener('input', calculateProfit);
+        document.getElementById('ebayFee').addEventListener('input', calculateProfit);
+        document.getElementById('shipCost').addEventListener('input', calculateProfit);
+// profit calculation ends *************
+
+    inventoryForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const product = document.getElementById('inventoryProduct').value;
+        const purchasedQuantity = parseInt(document.getElementById('purchasedQuantity').value);
+        const unitPrice = parseFloat(document.getElementById('inventoryUnitPrice').value);
+        const timestamp = document.getElementById('timestamp').value;
+
+        await fetch('/inventory', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product, purchasedQuantity, unitPrice, timestamp })
+        });
+        inventoryForm.reset();
+        fetchData();
+    });
+
+// ******* SALES FORMS **************
+    salesForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const product = document.getElementById('salesProduct').value;
+        const soldQuantity = parseInt(document.getElementById('soldQuantity').value);
+        //const unitPrice = parseFloat(document.getElementById('salesPrice').value);
+        const purchasedPrice = parseFloat(document.getElementById('purchasedPrice').value);
+        const salesPrice = parseFloat(document.getElementById('salesPrice').value);
+        const bankFee = parseFloat(document.getElementById('bankFee').value);
+        const ebayFee = parseFloat(document.getElementById('ebayFee').value);
+        const shipCost = parseFloat(document.getElementById('shipCost').value);
+        const profit = parseFloat(document.getElementById('profit').value);
+        const notes = document.getElementById('notes').value;
+        const timestamp = document.getElementById('timestamp').value;
+
+        await fetch('/sales', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ product, soldQuantity, purchasedPrice, salesPrice, 
+                                    bankFee, ebayFee, shipCost, profit, timestamp, notes })
+        });
+        salesForm.reset();
+        fetchData();
+    });
+
+    fetchProducts();
+    fetchData();
+});
+// Show notes in a popup
+function showNotes(notes) {
+            const notesWithBreaks = notes.replace(/\n/g, '<br>'); // Replace \n with <br>
+            document.getElementById('notesContent').innerHTML = notesWithBreaks;
+            document.getElementById('notesPopup').style.display = 'block';
+            //document.getElementById('notesContent').textContent = notes;
+            //document.getElementById('notesPopup').style.display = 'block';
+        }
+
+        // Close the popup
+        function closePopup() {
+            document.getElementById('notesPopup').style.display = 'none';
+        }
+
+</script>
+</body>
+</html>
